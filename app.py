@@ -41,10 +41,10 @@ if st.button("Predict"):
     else:
         top3 = predict_top3(selected)
 
-st.success("Top possible conditions:")
+        st.success("Top possible conditions:")
 
-for disease, p in top3:
-    st.write(f"• **{disease}** — {p*100:.1f}%")
+        for disease, p in top3:
+            st.write(f"• **{disease}** — {p*100:.1f}%")
 
-st.warning("This is not a medical diagnosis.")
-   
+        st.warning("This is not a medical diagnosis.")
+
