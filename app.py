@@ -23,9 +23,18 @@ def predict_disease(symptoms_list):
     return model.predict(input_df)[0]
 
 # Chat input
-user_input = st.text_input("Enter symptoms separated by comma:")
+# Dropdown symptom selector
+selected = st.multiselect("Select symptoms:", symptom_columns)
 
 if st.button("Predict"):
+
+    if len(selected) == 0:
+        st.error("Please select at least one symptom.")
+
+    else:
+        result = predict_disease(selected)
+        st.success(f"Possible Disease: {result}")
+        st.warning("This is not a medical diagnosis.")
     symptoms = [x.strip() for x in user_input.split(",")]
     result = predict_disease(symptoms)
 
