@@ -26,7 +26,18 @@ def predict_disease(symptoms_list):
 # Dropdown symptom selector
 selected = st.multiselect("Select symptoms:", symptom_columns)
 
+selected = st.multiselect("Select symptoms:", symptom_columns)
+
 if st.button("Predict"):
+
+    if len(selected) == 0:
+        st.error("Please select at least one symptom.")
+
+    else:
+        result = predict_disease(selected)
+
+        st.success(f"Possible Disease: {result}")
+        st.warning("This is not a medical diagnosis.")
 
     if len(selected) == 0:
         st.error("Please select at least one symptom.")
