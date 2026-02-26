@@ -6,6 +6,7 @@ import joblib
 st.set_page_config(page_title="AI Symptom Checker", page_icon="🩺")
 
 st.title("🩺 AI Symptom Checker Chatbot")
+st.info("Select multiple symptoms for better prediction accuracy.")
 st.caption("⚠️ Educational purpose only — not medical advice.")
 
 # Load model + columns
