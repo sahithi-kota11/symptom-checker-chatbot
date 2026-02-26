@@ -12,7 +12,7 @@ st.caption("⚠️ Educational purpose only — not medical advice.")
 model = joblib.load("symptom_model.pkl")
 symptom_columns = joblib.load("symptom_columns.pkl")
 
-def predict_disease(symptoms_list):
+def predict_top3(symptoms_list):
     row = np.zeros(len(symptom_columns))
 
     for s in symptoms_list:
@@ -21,7 +21,16 @@ def predict_disease(symptoms_list):
             row[symptom_columns.index(s)] = 1
 
     input_df = pd.DataFrame([row], columns=symptom_columns)
-    return model.predict(input_df)[0]
+
+    # probabilities for each disease
+    probs = model.predict_proba(input_df)[0]
+    classes = model.classes_
+
+    # top 3 indices (highest probabilities)
+    top_idx = np.argsort(probs)[-3:][::-1]
+
+    top3 = [(classes[i], float(probs[i])) for i in top_idx]
+    return top3
 
 # ✅ Only ONE multiselect
 selected = st.multiselect("Select symptoms:", symptom_columns)
@@ -30,6 +39,12 @@ if st.button("Predict"):
     if len(selected) == 0:
         st.error("Please select at least one symptom.")
     else:
-        result = predict_disease(selected)
-        st.success(f"Possible Disease: {result}")
-        st.warning("This is not a medical diagnosis.")
+        top3 = predict_top3(selected)
+
+st.success("Top possible conditions:")
+
+for disease, p in top3:
+    st.write(f"• **{disease}** — {p*100:.1f}%")
+
+st.warning("This is not a medical diagnosis.")
+   
