@@ -34,17 +34,18 @@ def predict_top3(symptoms_list):
 
 # ✅ Only ONE multiselect
 selected = st.multiselect("Select symptoms:", symptom_columns)
-
 if st.button("Predict"):
+
     if len(selected) == 0:
         st.error("Please select at least one symptom.")
+
     else:
-      top3 = predict_top3(selected)
+        top3 = predict_top3(selected)
 
-# take only first prediction
-best_disease, best_prob = top3[0]
+        # show only ONE result
+        best_disease, best_prob = top3[0]
 
-st.success(f"Possible Disease: {best_disease} ({best_prob*100:.1f}%)")
-
+        st.success(f"Possible Disease: {best_disease} ({best_prob*100:.1f}%)")
         st.warning("This is not a medical diagnosis.")
+
 
