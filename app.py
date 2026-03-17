@@ -105,14 +105,7 @@ if st.button("Predict"):
         top3 = predict_top3(st.session_state.final_selected)
         best_disease, best_prob = top3[0]
 
-               confidence = round(min(best_prob * 100, 95.0), 1)
-
-                confidence = round(min(best_prob * 100, 95.0), 1)
         confidence = round(min(best_prob * 100, 95.0), 1)
-
-               confidence = round(min(best_prob * 100, 95.0), 1)
-
-                confidence = round(min(best_prob * 100, 95.0), 1)
 
         if confidence < 60:
             st.warning("The symptoms you selected do not give a clear prediction. Please consult a healthcare professional.")
