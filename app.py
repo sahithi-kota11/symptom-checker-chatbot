@@ -34,6 +34,7 @@ def predict_top3(symptoms_list):
 
 # ✅ Only ONE multiselect
 selected = st.multiselect("Select symptoms:", symptom_columns)
+
 if st.button("Predict"):
 
     if len(selected) == 0:
@@ -45,7 +46,15 @@ if st.button("Predict"):
         # show only ONE result
         best_disease, best_prob = top3[0]
 
-        st.success(f"Possible Disease: {best_disease} ({best_prob*100:.1f}%)")
+        confidence = round(min(best_prob * 100, 99.0), 1)
+
+        if confidence < 50:
+            st.warning("⚠ No clear condition identified based on the selected symptoms. Please consult a healthcare professional.")
+        else:
+            st.success(f"Possible Disease: {best_disease}")
+
+            st.write("### Prediction Level")
+            st.progress(int(confidence))
+            st.write(f"{confidence}%")
+
         st.warning("This is not a medical diagnosis.")
-
-
