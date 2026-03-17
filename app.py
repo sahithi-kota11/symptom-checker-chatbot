@@ -105,10 +105,18 @@ if st.button("Predict"):
         top3 = predict_top3(st.session_state.final_selected)
         best_disease, best_prob = top3[0]
 
+               confidence = round(min(best_prob * 100, 95.0), 1)
+
+                confidence = round(min(best_prob * 100, 95.0), 1)
         confidence = round(min(best_prob * 100, 95.0), 1)
 
-        if confidence < 50:
-            st.warning("⚠ No clear condition identified based on the selected symptoms. Please consult a healthcare professional.")
+               confidence = round(min(best_prob * 100, 95.0), 1)
+
+                confidence = round(min(best_prob * 100, 95.0), 1)
+
+        if confidence < 60:
+            st.warning("The symptoms you selected do not give a clear prediction. Please consult a healthcare professional.")
+            st.warning("This is not a medical diagnosis.")
         else:
             st.success(f"Possible Disease: {best_disease}")
 
@@ -116,4 +124,4 @@ if st.button("Predict"):
             st.progress(int(confidence))
             st.write(f"{confidence}%")
 
-        st.warning("This is not a medical diagnosis.")
+            st.warning("This is not a medical diagnosis.")
