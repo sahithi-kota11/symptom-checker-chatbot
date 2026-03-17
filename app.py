@@ -101,6 +101,9 @@ if st.button("Clear All Symptoms"):
 if st.button("Predict"):
     if len(st.session_state.final_selected) == 0:
         st.error("Please add at least one symptom.")
+    elif len(st.session_state.final_selected) > 6:
+        st.warning("The symptoms you selected do not give a clear prediction. Please consult a healthcare professional.")
+        st.warning("This is not a medical diagnosis.")
     else:
         top3 = predict_top3(st.session_state.final_selected)
         best_disease, best_prob = top3[0]
