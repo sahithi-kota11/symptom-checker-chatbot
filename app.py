@@ -46,7 +46,7 @@ symptom_groups = {
     ]
 }
 
-# Keep only symptoms that actually exist in the model
+# Keep only symptoms that exist in model
 for group in symptom_groups:
     symptom_groups[group] = [s for s in symptom_groups[group] if s in symptom_columns]
 
@@ -67,26 +67,44 @@ def predict_top3(symptoms_list):
     top3 = [(classes[i], float(probs[i])) for i in top_idx]
     return top3
 
+# Store final selected symptoms across categories
+if "final_selected" not in st.session_state:
+    st.session_state.final_selected = []
+
 # Category selection
 category = st.selectbox("Select symptom category:", list(symptom_groups.keys()))
 
-# Show only related symptoms
-selected = st.multiselect(
+# Symptoms from selected category
+current_selected = st.multiselect(
     f"Select symptoms from {category}:",
     symptom_groups[category]
 )
 
+# Add symptoms button
+if st.button("Add Symptoms"):
+    for symptom in current_selected:
+        if symptom not in st.session_state.final_selected:
+            st.session_state.final_selected.append(symptom)
+
+# Show all selected symptoms
+st.write("### Selected Symptoms")
+if st.session_state.final_selected:
+    st.write(", ".join(st.session_state.final_selected))
+else:
+    st.write("No symptoms added yet.")
+
+# Clear symptoms button
+if st.button("Clear All Symptoms"):
+    st.session_state.final_selected = []
+
+# Predict button
 if st.button("Predict"):
-
-    if len(selected) == 0:
-        st.error("Please select at least one symptom.")
-
+    if len(st.session_state.final_selected) == 0:
+        st.error("Please add at least one symptom.")
     else:
-        top3 = predict_top3(selected)
-
+        top3 = predict_top3(st.session_state.final_selected)
         best_disease, best_prob = top3[0]
 
-        # Keep it dynamic, but cap at 95%
         confidence = round(min(best_prob * 100, 95.0), 1)
 
         if confidence < 50:
